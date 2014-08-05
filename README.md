@@ -2,6 +2,9 @@
 
 [![NPM version](https://badge.fury.io/js/warna.svg)](http://badge.fury.io/js/warna)
 [![Bower version](https://badge.fury.io/bo/warna.svg)](http://badge.fury.io/bo/warna)
+[![Dependency](https://david-dm.org/publicis-indonesia/warna.png)](https://david-dm.org/publicis-indonesia/warna#info=dependencies)
+[![Dev Dependency](https://david-dm.org/publicis-indonesia/warna/dev-status.png)](https://david-dm.org/publicis-indonesia/warna#info=devDependencies&view=table)
+
 
 Warna is color utility library written in Javascript
 to help you parse, convert, or manipulate colors.
