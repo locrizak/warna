@@ -74,12 +74,11 @@ console.log(color);
 // Get 3 color slices in red-blue gradient
 var color = warna.gradient('#ff0000', '#0000ff').getSlices(3);
 console.log(color);
-/* 
-will print
-[ { red: 255, green: 0, blue: 0, hex: '#ff0000' },
-  { red: 127, green: 0, blue: 127, hex: '#7f007f' },
-  { red: 0, green: 0, blue: 255, hex: '#0000ff' } ]
-  */
+
+//  will print
+//  [ { red: 255, green: 0, blue: 0, hex: '#ff0000' },
+//  { red: 127, green: 0, blue: 127, hex: '#7f007f' },
+//  { red: 0, green: 0, blue: 255, hex: '#0000ff' } ]
 ```
 
 __Lighten or darken color.__
@@ -177,12 +176,12 @@ _Example:_
 // Getting 3 color slices of black-white gradient
 warna.gradient('#ffffff', '#000000).getSlices(3);
 
-/* Return
-[ 
-  { red: 255, green: 255, blue: 255, hex: '#ffffff' },
-  { red: 127, green: 127, blue: 127, hex: '#7f7f7f' },
-  { red: 0, green: 0, blue: 0, hex: '#000000' } 
-]*/
+//  Return
+//  [ 
+//    { red: 255, green: 255, blue: 255, hex: '#ffffff' },
+//    { red: 127, green: 127, blue: 127, hex: '#7f7f7f' },
+//    { red: 0, green: 0, blue: 0, hex: '#000000' } 
+//  ]
 ```
 
 ### getPosition(pos)
