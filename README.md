@@ -174,7 +174,7 @@ _Example:_
 
 ```javascript
 // Getting 3 color slices of black-white gradient
-warna.gradient('#ffffff', '#000000).getSlices(3);
+warna.gradient('#ffffff', '#000000').getSlices(3);
 
 //  Return
 //  [ 
