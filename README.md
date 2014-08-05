@@ -24,7 +24,7 @@ or download latest version from [Github](https://github.com/publicis-indonesia/w
 
 **Node.js**
 
-```
+```javascript
 var warna = require('warna');
 
 var hex = '#ffffff';
@@ -36,7 +36,7 @@ console.log(rgb);
 
 **Browser**
 
-```
+```html
 <script src="/path/to/warna.js"></script>
 <script>
   var hex = '#ffffff';
@@ -51,7 +51,7 @@ console.log(rgb);
 
 __Convert color to RGB or HEX.__
 
-```
+```javascript
 // Convert HEX to RGB
 var rgb = warna.hexToRgb('#000000');
 console.log(rgb); 
@@ -65,7 +65,7 @@ console.log(hex);
 
 __Get gradient color position or color slices.__
 
-```
+```javascript
 // Get color in center of white-black gradient
 var color = warna.gradient('#ffffff', '#000000').getPosition(0.5);
 console.log(color); 
@@ -84,7 +84,7 @@ will print
 
 __Lighten or darken color.__
 
-```
+```javascript
 // Lighten red by 20%
 var color = warna.lighten('#ff0000', 0.2);
 console.log(color); 
@@ -108,7 +108,7 @@ _Argument:_
 
 _Example:_
 
-```
+```javascript
 warna.hexToRgb('#ffffff');
 // return {red: 255, green: 255, blue: 255}
 ```
@@ -125,7 +125,7 @@ _Arguments:_
 
 _Example:_
 
-```
+```javascript
 warna.rgbToHex(255, 255, 255);
 // return '#FFFFFF'
 ```
@@ -140,7 +140,7 @@ _Argument:_
 
 _Example:_
 
-```
+```javascript
 // Parse HEX color string
 warna.parse('#000000');
 // return {red: 0, green: 0, blue: 0, hex: '#000000'}
@@ -173,7 +173,7 @@ _Argument:_
 
 _Example:_
 
-```
+```javascript
 // Getting 3 color slices of black-white gradient
 warna.gradient('#ffffff', '#000000).getSlices(3);
 
@@ -195,7 +195,7 @@ _Argument:_
 
 _Example:_
 
-```
+```javascript
 // Getting middle color of red-white gradient
 warna.gradient('#ff0000', '#ffffff').getPosition(0.5);
 
@@ -213,7 +213,7 @@ _Arguments:_
 
 _Example:_
 
-```
+```javascript
 // Lighten red by 20%
 warna.lighten('#ff0000', 0.2);
 
@@ -231,7 +231,7 @@ _Arguments:_
 
 _Example:_
 
-```
+```javascript
 // Darken red by 20%
 warna.darken('#ff0000', 0.2);
 
