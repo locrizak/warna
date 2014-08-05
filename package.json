@@ -1,6 +1,6 @@
 {
   "name": "warna",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Color utility library in Javascript",
   "main": "warna.js",
   "scripts": {
