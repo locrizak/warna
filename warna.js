@@ -13,8 +13,7 @@
 
 	// Define module, global and property
 	var warna = {},
-		global = typeof global !== 'undefined' ? global : this,
-		gradient;
+		global = typeof global !== 'undefined' ? global : this;
 
 	/** 
 	 * Converter utility
@@ -88,10 +87,10 @@
 	/**
 	 * Gradient utility
 	 */
-	warna.gradient = function(begin, end) {
+	function Gradient(begin, end) {
 
 		// Prepare gradient
-		gradient = {
+		var gradient = {
 			begin: null,
 			end: null
 		};
@@ -107,11 +106,15 @@
 		if (!gradient.end) {
 			throw Error('Ending color is not formatted properly.');
 		}
+
+		this.gradient = gradient;
 		
 		return this;
-	};
+	}
 
-	warna.getSlices = function(slice) {
+	Gradient.prototype.getSlices = function(slice) {
+
+		var gradient = this.gradient;
 
 		// Check gradient color
 		if (!gradient.begin || !gradient.end) {
@@ -149,13 +152,15 @@
 		var colors = [];
 
 		for (var a = 0; a < positions.length; a++) {
-			colors.push(warna.getPosition(positions[a]));
+			colors.push(this.getPosition(positions[a]));
 		}
 
 		return colors;
 	};
 
-	warna.getPosition = function(pos) {
+	Gradient.prototype.getPosition = function(pos) {
+
+		var gradient = this.gradient;
 
 		// Check gradient color
 		if (!gradient.begin || !gradient.end) {
@@ -179,19 +184,19 @@
 		return color;
 	};
 
+	warna.gradient = Gradient;
+
 	/**
-	 * Manipulation utility
+	 * Brightness utility
 	 */
 	warna.lighten = function(color, pos) {
-		return warna
-			.gradient(warna.parse(color), [255, 255, 255])
-			.getPosition(pos);
+		var grad = new Gradient(color, '#ffffff');
+		return grad.getPosition(pos);
 	};
 
 	warna.darken = function(color, pos) {
-		return warna
-			.gradient(warna.parse(color), [0, 0, 0])
-			.getPosition(pos);
+		var grad = new Gradient(color, '#000000');
+		return grad.getPosition(pos);
 	};
 
 	/**

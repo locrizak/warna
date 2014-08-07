@@ -12,9 +12,9 @@ describe('Gradient utility test:', function() {
 
 		it('should return proper formatted warna object', function() {
 
-			var colors = warna.gradient('#ffffff', '#000000').getSlices(3);
+			var color = new warna.gradient('#ffffff', '#000000');
 
-			assert.deepEqual(colors, [
+			assert.deepEqual(color.getSlices(3), [
 				{
 					red: 255, 
 					green: 255,
@@ -46,8 +46,9 @@ describe('Gradient utility test:', function() {
 
 		it('should return proper formatted warna object', function() {
 
-			var color = warna.gradient('#ffffff', '#000000').getPosition(0.5);
-			assert.deepEqual(color, {
+			var color = new warna.gradient('#ffffff', '#000000');
+
+			assert.deepEqual(color.getPosition(0.5), {
 				red: 127,
 				green: 127,
 				blue: 127,
@@ -57,8 +58,10 @@ describe('Gradient utility test:', function() {
 		});
 
 		it('should return proper warna object (with alpha)', function() {
-			var color = warna.gradient([255, 255, 255, 0.25], [0, 0, 0, 0.75]).getPosition(0.5);
-			assert.deepEqual(color, {
+
+			var color = new warna.gradient([255, 255, 255, 0.25], [0, 0, 0, 0.75]);
+			
+			assert.deepEqual(color.getPosition(0.5), {
 				red: 127,
 				green: 127,
 				blue: 127,
