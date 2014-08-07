@@ -15,10 +15,27 @@
 	var warna = {},
 		global = typeof global !== 'undefined' ? global : this;
 
+	function clone(obj) {
+
+	    if (null === obj || "object" !== typeof obj) {
+	    	return obj;
+	    }
+
+	    var copy = obj.constructor();
+
+	    for (var attr in obj) {
+	        if (obj.hasOwnProperty(attr)) {
+	        	copy[attr] = obj[attr];
+	        }
+	    }
+
+	    return copy;
+	}
+
 	/** 
-	 * Converter utility
+	 * Converter tools
 	 */
-	warna.hexToRgb = function(hex) {
+	function hexToRgb(hex) {
 
 	    // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
 	    var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
@@ -33,55 +50,168 @@
 	        blue: parseInt(result[3], 16)
 	    } : null;
 
-	};
+	}
 
-	warna.rgbToHex = function(red, green, blue) {
+	function rgbToHex(red, green, blue) {
 		return "#" + ((1 << 24) + (red << 16) + (green << 8) + blue).toString(16).slice(1);
-	};
+	}
 
+	function hsvToRgb(hue, saturation, value) {
+
+		var red, green, blue;
+
+		if (saturation === 0) {
+
+			red = green = blue = Math.round(value * 2.55);
+
+		} else {
+
+			hue /= 60;
+			saturation /= 100;
+			value /= 100;
+
+			var i = Math.floor(hue);
+			var f = hue - i;
+			var p = value * (1 - saturation);
+			var q = value * (1 - saturation * f);
+			var t = value * (1 - saturation * (1 - f));
+
+			switch(i) {
+				case 0: 
+					red 	= hsv.value; 
+					green 	= t; 
+					blue 	= p; 
+					break;
+				case 1: 
+					red 	= q; 
+					green 	= hsv.value; 
+					blue 	= p; 
+					break;
+				case 2: 
+					red 	= p; 
+					green 	= hsv.value; 
+					blue 	= t; 
+					break;
+				case 3: 
+					red 	= p; 
+					green 	= q; 
+					blue 	= hsv.value; 
+					break;
+				case 4: 
+					red 	= t; 
+					green 	= p; 
+					blue 	= hsv.value; 
+					break;
+				default: 
+					red 	= hsv.value; 
+					green 	= p; 
+					blue 	= q;
+			}
+
+			red 	= Math.round(red * 255);
+			green 	= Math.round(green * 255);
+			blue 	= Math.round(blue * 255);
+		}
+
+		return {
+			red: red,
+			green: green,
+			blue: blue
+		};
+	}
+
+	function rgbToHsv(red, green, blue) {
+
+		var hue, saturation, value;
+
+		function min3(a,b,c) { return (a<b)?((a<c)?a:c):((b<c)?b:c); }
+		function max3(a,b,c) { return (a>b)?((a>c)?a:c):((b>c)?b:c); }
+
+		var max = max3(red, green, blue);
+		var dif = max - min3(red, green, blue);
+
+		saturation = (max === 0.0) ? 0 : (100 * dif / max);
+
+		if (saturation === 0) {
+			hue = 0;
+		} else if (red === max) {
+			hue = 60.0 * (green - blue) / dif;
+		} else if (green === max) {
+			hue = 120.0 + 60.0 * (rgb.b - rgb.r) / dif;
+		} else if (blue === max) {
+			hue = 240.0 + 60.0 * (rgb.r - rgb.g) / dif;
+		}
+
+		if (hue < 0.0) {
+			hue += 360.0;
+		}
+
+		return {
+			hue: Math.round(hue),
+			saturation: Math.round(saturation),
+			value: Math.round(max * 100 / 255)
+		};
+	}
+
+	/**
+	 * Parser utility
+	 */
 	warna.parse = function(color) {
 
-		var newColor = null;
+		var rgb, rgba, hex, hsv;
 
+		// Convert all type to rgb object
 		if (typeof color === 'string') {
 
-			newColor = warna.hexToRgb(color);
-			newColor.alpha = 1;
-
-		} else if (color instanceof Array) {
-
-			newColor = {
-				red: color[0],
-				green: color[1],
-				blue: color[2],
-				alpha: 1
-			};
-
-			if (color.length === 4) {
-				newColor.alpha = color[3];
-			}
+			rgb 		= hexToRgb(color);
 
 		} else if (color instanceof Object) {
 
-			newColor = {
-				red: color.red,
-				green: color.green,
-				blue: color.blue,
-				alpha: 1
-			};
+			// Parse RGB object
+			if (
+				('red' in color) && 
+				('green' in color) && 
+				('blue' in color)
+			) {
+				rgb = {
+					red: color.red,
+					green: color.green,
+					blue: color.blue
+				};
+			}
 
-			if ('alpha' in color) {
-				newColor.alpha = color.alpha;
+			// Convert HSV object
+			if (
+				('hue' in color) && 
+				('saturation' in color) && 
+				('value' in color)
+			) {
+				rgb = hsvToRgb(color.hue, color.saturation, color.value);
 			}
 
 		}
 
-		// Set hex format
-		if (newColor) {
-			newColor.hex = warna.rgbToHex(newColor.red, newColor.green, newColor.blue);
+		// RGB is not converted
+		if (!rgb) {
+			return null;
 		}
 
-		return newColor;
+		// Clone rgb to rgba
+		rgba 		= clone(rgb);
+		rgba.alpha 	= 1;
+
+		if (color instanceof Object) {
+			if ('alpha' in color) {
+				rgba.alpha = color.alpha;
+			}
+		}
+
+		return {
+			rgb: rgb,
+			rgba: rgba,
+			hex: rgbToHex(rgb.red, rgb.green, rgb.blue),
+			hsv: rgbToHsv(rgb.red, rgb.green, rgb.blue)
+		};
 	};
 
 	/**
@@ -112,9 +242,40 @@
 		return this;
 	}
 
-	Gradient.prototype.getSlices = function(slice) {
+	Gradient.prototype.getPosition = function(pos) {
 
 		var gradient = this.gradient;
+
+		// Check gradient color
+		if (!gradient.begin || !gradient.end) {
+			throw Error('Gradient color is not defined.');
+		}
+
+		// Redefine color
+		var begin 	= gradient.begin.rgb;
+		var end 	= gradient.end.rgb;
+
+		var color = {
+		    red: begin.red + Math.floor(pos * (end.red - begin.red)),
+		    green: begin.green + Math.floor(pos * (end.green - begin.green)),
+		    blue: begin.blue + Math.floor(pos * (end.blue - begin.blue))
+		};
+
+		// Check alpha value
+		var beginAlpha 	= gradient.begin.rgba.alpha;
+		var endAlpha 	= gradient.end.rgba.alpha;
+
+		if (beginAlpha !== endAlpha) {
+			color.alpha = beginAlpha + (pos * (endAlpha - beginAlpha));
+		}
+
+		return warna.parse(color);
+	};
+
+	Gradient.prototype.getSlices = function(slice, type) {
+
+		type = type || null;
+		var gradient = this.gradient;	
 
 		// Check gradient color
 		if (!gradient.begin || !gradient.end) {
@@ -155,36 +316,25 @@
 			colors.push(this.getPosition(positions[a]));
 		}
 
-		return colors;
-	};
+		function convert(type) {
+			var result = [];
 
-	Gradient.prototype.getPosition = function(pos) {
+			for (var a = 0; a < colors.length; a++) {
+				result.push(colors[type]);
+			}
 
-		var gradient = this.gradient;
-
-		// Check gradient color
-		if (!gradient.begin || !gradient.end) {
-			throw Error('Gradient color is not defined.');
+			return result;
 		}
 
-		// Redefine color
-		var begin 	= gradient.begin;
-		var end 	= gradient.end;
+		// Return raw type
+		if (!type) {
+			return colors;
+		}
 
-		var color = {
-		    red: begin.red + Math.floor(pos * (end.red - begin.red)),
-		    green: begin.green + Math.floor(pos * (end.green - begin.green)),
-		    blue: begin.blue + Math.floor(pos * (end.blue - begin.blue)),
-		    alpha: begin.alpha + (pos * (end.alpha - begin.alpha))
-		};
-
-		// Add hex property to color
-		color.hex = warna.rgbToHex(color.red, color.green, color.blue);
-
-		return color;
+		return convert(type);
 	};
 
-	warna.gradient = Gradient;
+	warna.Gradient = Gradient;
 
 	/**
 	 * Brightness utility
