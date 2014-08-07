@@ -19,18 +19,21 @@ describe('Gradient utility test:', function() {
 					red: 255, 
 					green: 255,
 					blue: 255,
+					alpha: 1,
 					hex: '#ffffff'
 				},
 				{
 					red: 127,
 					green: 127,
 					blue: 127,
+					alpha: 1,
 					hex: "#7f7f7f"
 				},
 				{
 					red: 0, 
 					green: 0,
 					blue: 0,
+					alpha: 1,
 					hex: '#000000'
 				},
 			]);
@@ -48,6 +51,18 @@ describe('Gradient utility test:', function() {
 				red: 127,
 				green: 127,
 				blue: 127,
+				alpha: 1,
+				hex: "#7f7f7f"
+			});
+		});
+
+		it('should return proper warna object (with alpha)', function() {
+			var color = warna.gradient([255, 255, 255, 0.25], [0, 0, 0, 0.75]).getPosition(0.5);
+			assert.deepEqual(color, {
+				red: 127,
+				green: 127,
+				blue: 127,
+				alpha: 0.5,
 				hex: "#7f7f7f"
 			});
 		});

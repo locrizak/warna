@@ -46,6 +46,7 @@ describe('Convert utility test:', function(){
 				red: 255,
 				green: 255,
 				blue: 255,
+				alpha: 1,
 				hex: '#ffffff'
 			}, warna.parse('#ffffff'));
 		});
@@ -55,6 +56,7 @@ describe('Convert utility test:', function(){
 				red: 255,
 				green: 255,
 				blue: 255,
+				alpha: 1,
 				hex: '#ffffff'
 			}, warna.parse([255, 255, 255]));
 		});
@@ -64,6 +66,7 @@ describe('Convert utility test:', function(){
 				red: 255,
 				green: 255,
 				blue: 255,
+				alpha: 1,
 				hex: '#ffffff'
 			}, warna.parse({
 				red: 255,

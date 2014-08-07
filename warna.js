@@ -47,22 +47,33 @@
 		if (typeof color === 'string') {
 
 			newColor = warna.hexToRgb(color);
+			newColor.alpha = 1;
 
 		} else if (color instanceof Array) {
 
 			newColor = {
 				red: color[0],
 				green: color[1],
-				blue: color[2]
+				blue: color[2],
+				alpha: 1
 			};
+
+			if (color.length === 4) {
+				newColor.alpha = color[3];
+			}
 
 		} else if (color instanceof Object) {
 
 			newColor = {
 				red: color.red,
 				green: color.green,
-				blue: color.blue
+				blue: color.blue,
+				alpha: 1
 			};
+
+			if ('alpha' in color) {
+				newColor.alpha = color.alpha;
+			}
 
 		}
 
@@ -158,7 +169,8 @@
 		var color = {
 		    red: begin.red + Math.floor(pos * (end.red - begin.red)),
 		    green: begin.green + Math.floor(pos * (end.green - begin.green)),
-		    blue: begin.blue + Math.floor(pos * (end.blue - begin.blue))
+		    blue: begin.blue + Math.floor(pos * (end.blue - begin.blue)),
+		    alpha: begin.alpha + (pos * (end.alpha - begin.alpha))
 		};
 
 		// Add hex property to color
