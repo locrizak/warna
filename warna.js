@@ -158,7 +158,7 @@
 	 */
 	warna.parse = function(color) {
 
-		var rgb, rgba, hex, hsv;
+		var rgb, hex, hsv, alpha = 1;
 
 		// Convert all type to rgb object
 		if (typeof color === 'string') {
@@ -196,21 +196,18 @@
 			return null;
 		}
 
-		// Clone rgb to rgba
-		rgba 		= clone(rgb);
-		rgba.alpha 	= 1;
-
+		// Check alpha
 		if (color instanceof Object) {
 			if ('alpha' in color) {
-				rgba.alpha = color.alpha;
+				alpha = color.alpha;
 			}
 		}
 
 		return {
 			rgb: rgb,
-			rgba: rgba,
 			hex: rgbToHex(rgb.red, rgb.green, rgb.blue),
-			hsv: rgbToHsv(rgb.red, rgb.green, rgb.blue)
+			hsv: rgbToHsv(rgb.red, rgb.green, rgb.blue),
+			alpha: alpha
 		};
 	};
 
@@ -262,8 +259,8 @@
 		};
 
 		// Check alpha value
-		var beginAlpha 	= gradient.begin.rgba.alpha;
-		var endAlpha 	= gradient.end.rgba.alpha;
+		var beginAlpha 	= gradient.begin.alpha;
+		var endAlpha 	= gradient.end.alpha;
 
 		if (beginAlpha !== endAlpha) {
 			color.alpha = beginAlpha + (pos * (endAlpha - beginAlpha));

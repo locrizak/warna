@@ -19,6 +19,8 @@ describe('Parser utility test:', function(){
 
 			var color = warna.parse('#FFF');
 
+			assert.equal(color.alpha, 1);
+
 			assert.deepEqual(color.rgb, {
 				red: 255,
 				green: 255,
@@ -36,6 +38,8 @@ describe('Parser utility test:', function(){
 		it('should return correct warna object if supplied with 6-characters hex string', function() {
 			
 			var color = warna.parse('#FFFFFF');
+
+			assert.equal(color.alpha, 1);
 
 			assert.deepEqual(color.rgb, {
 				red: 255,
@@ -60,6 +64,7 @@ describe('Parser utility test:', function(){
 			var color = warna.parse({red: 255, green: 255, blue: 255});
 
 			assert.deepEqual(color.hex, '#ffffff');
+			assert.equal(color.alpha, 1);
 
 			assert.deepEqual(color.hsv, {
 				hue: 0,
@@ -78,6 +83,7 @@ describe('Parser utility test:', function(){
 			var color = warna.parse({red: 255, green: 255, blue: 255, alpha: 0.5});
 
 			assert.deepEqual(color.hex, '#ffffff');
+			assert.equal(color.alpha, 0.5);
 
 			assert.deepEqual(color.hsv, {
 				hue: 0,
@@ -96,6 +102,7 @@ describe('Parser utility test:', function(){
 			var color = warna.parse({hue: 0, saturation: 0, value: 100});
 
 			assert.deepEqual(color.hex, '#ffffff');
+			assert.equal(color.alpha, 1);
 
 			assert.deepEqual(color.rgb, {
 				red: 255,

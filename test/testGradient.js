@@ -20,18 +20,13 @@ describe('Gradient utility test:', function() {
 					green: 127,
 					blue: 127
 				},
-				rgba: {
-					red: 127,
-					green: 127,
-					blue: 127,
-					alpha: 1
-				},
 				hsv: {
 					hue: 0,
 					saturation: 0,
 					value: 50
 				},
-				hex: "#7f7f7f"
+				hex: '#7f7f7f',
+				alpha: 1
 			});
 		});
 
@@ -55,18 +50,13 @@ describe('Gradient utility test:', function() {
 					green: 127,
 					blue: 127
 				},
-				rgba: {
-					red: 127,
-					green: 127,
-					blue: 127,
-					alpha: 0.5
-				},
 				hsv: {
 					hue: 0,
 					saturation: 0,
 					value: 50
 				},
-				hex: "#7f7f7f"
+				hex: '#7f7f7f',
+				alpha: 0.5
 			});
 		});
 		
