@@ -13,7 +13,7 @@ describe('Gradient utility test:', function() {
 		it('should return correct Warna object', function() {
 
 			var color = new warna.Gradient('#ffffff', '#000000');
-
+			
 			assert.deepEqual(color.getPosition(0.5), {
 				rgb: {
 					red: 127,
@@ -24,6 +24,11 @@ describe('Gradient utility test:', function() {
 					hue: 0,
 					saturation: 0,
 					value: 50
+				},
+				hsl: {
+					hue: 0, 
+					saturation: 0, 
+					luminosity: 0.4980392156862745
 				},
 				hex: '#7f7f7f',
 				alpha: 1
@@ -55,6 +60,11 @@ describe('Gradient utility test:', function() {
 					saturation: 0,
 					value: 50
 				},
+				hsl: {
+					hue: 0, 
+					saturation: 0, 
+					luminosity: 0.4980392156862745
+				},
 				hex: '#7f7f7f',
 				alpha: 0.5
 			});
@@ -78,6 +88,11 @@ describe('Gradient utility test:', function() {
 					hue: 0,
 					saturation: 0,
 					value: 50
+				},
+				hsl: {
+					hue: 0, 
+					saturation: 0, 
+					luminosity: 0.4980392156862745
 				},
 				hex: '#7f7f7f',
 				alpha: 1
@@ -155,6 +170,40 @@ describe('Gradient utility test:', function() {
 				hue: 0,
 				saturation: 0,
 				value: 50,
+				alpha: 0.5
+			});
+
+		});
+
+		it('should return HSL object', function() {
+
+			var color = new warna.Gradient('#ffffff', '#000000');
+			assert.deepEqual(color.getSlices(3, 'hsl')[1], {
+				hue: 0, 
+				saturation: 0, 
+				luminosity: 0.4980392156862745
+			});
+
+		});
+
+		it('should return HSL object (with Alpha)', function() {
+
+			var color = new warna.Gradient({
+				red: 255, 
+				green: 255, 
+				blue: 255, 
+				alpha: 0.25
+			}, {
+				red: 0, 
+				green: 0, 
+				blue: 0, 
+				alpha: 0.75
+			});
+
+			assert.deepEqual(color.getSlices(3, 'hsl')[1], {
+				hue: 0, 
+				saturation: 0, 
+				luminosity: 0.4980392156862745,
 				alpha: 0.5
 			});
 

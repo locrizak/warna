@@ -33,6 +33,12 @@ describe('Parser utility test:', function(){
 				value: 100
 			});
 
+			assert.deepEqual(color.hsl, {
+				hue: 0,
+				saturation: 0,
+				luminosity: 1
+			});
+
 		});
 
 		it('should return correct warna object if supplied with 6-characters hex string', function() {
@@ -51,6 +57,12 @@ describe('Parser utility test:', function(){
 				hue: 0,
 				saturation: 0,
 				value: 100
+			});
+
+			assert.deepEqual(color.hsl, {
+				hue: 0,
+				saturation: 0,
+				luminosity: 1
 			});
 
 		});
@@ -72,6 +84,12 @@ describe('Parser utility test:', function(){
 				value: 100
 			});
 
+			assert.deepEqual(color.hsl, {
+				hue: 0,
+				saturation: 0,
+				luminosity: 1
+			});
+
 		});
 
 	});
@@ -89,6 +107,37 @@ describe('Parser utility test:', function(){
 				red: 255,
 				green: 255,
 				blue: 255
+			});
+
+			assert.deepEqual(color.hsl, {
+				hue: 0,
+				saturation: 0,
+				luminosity: 1
+			});
+
+		});
+
+	});
+
+	describe('Parse HSL color', function() {
+
+		it('should return correct warna object if supplied with HSL object', function() {
+
+			var color = warna.parse({hue: 0, saturation: 0, luminosity: 1});
+
+			assert.deepEqual(color.hex, '#ffffff');
+			assert.equal(color.alpha, 1);
+
+			assert.deepEqual(color.rgb, {
+				red: 255,
+				green: 255,
+				blue: 255
+			});
+
+			assert.deepEqual(color.hsv, {
+				hue: 0,
+				saturation: 0,
+				value: 100
 			});
 
 		});

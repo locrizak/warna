@@ -35,6 +35,11 @@
 	/** 
 	 * Converter tools
 	 */
+
+	/**
+	 * RGB - HEX converter
+	 * Original Source: http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+	 */
 	function hexToRgb(hex) {
 
 	    // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
@@ -56,6 +61,10 @@
 		return "#" + ((1 << 24) + (red << 16) + (green << 8) + blue).toString(16).slice(1);
 	}
 
+	/**
+	 * RGB - HSV converter
+	 * Original Source: http://design.geckotribe.com/colorwheel/
+	 */
 	function hsvToRgb(hue, saturation, value) {
 
 		var red, green, blue;
@@ -154,6 +163,85 @@
 	}
 
 	/**
+	 * RGB - HSL converter
+	 * Original Source: http://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion
+	 */
+	function hslToRgb(hue, saturation, luminosity){
+
+	    var red, green, blue;
+
+        function hue2rgb(p, q, t) {
+
+            if(t < 0) t += 1;
+            if(t > 1) t -= 1;
+
+            if(t < 1/6) return p + (q - p) * 6 * t;
+            if(t < 1/2) return q;
+            if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+
+            return p;
+        }
+
+	    if (saturation === 0) {
+
+	        red = green = blue = luminosity;
+
+	    } else {
+
+	        var q = luminosity < 0.5 ? luminosity * (1 + saturation) : luminosity + saturation - luminosity * saturation;
+	        var p = 2 * luminosity - q;
+
+	        red 	= hue2rgb(p, q, hue + 1/3);
+	        green 	= hue2rgb(p, q, hue);
+	        blue 	= hue2rgb(p, q, hue - 1/3);
+	    }
+
+	    return {
+	    	red: Math.round(red * 255),
+	    	green: Math.round(green * 255),
+	    	blue: Math.round(blue * 255)
+	    };
+	}
+
+	function rgbToHsl(red, green, blue){
+
+	    red = red / 255;
+    	green = green / 255; 
+    	blue = blue / 255;
+
+	    var max = Math.max(red, green, blue), 
+	    	min = Math.min(red, green, blue);
+
+	    var hue, 
+	    	saturation, 
+	    	luminosity = (max + min) / 2;
+
+	    if (max === min) {
+
+	        hue = saturation = 0;
+
+	    } else {
+
+	        var d = max - min;
+	        saturation = luminosity > 0.5 ? d / (2 - max - min) : d / (max + min);
+
+	        switch(max){
+	            case red: hue = (green - blue) / d + (green < blue ? 6 : 0); break;
+	            case green: hue = (blue - red) / d + 2; break;
+	            case blue: hue = (red - green) / d + 4; break;
+	        }
+
+	        hue /= 6;
+	    }
+
+	    return {
+	    	hue: hue,
+	    	saturation: saturation,
+	    	luminosity: luminosity
+	    };
+	}
+
+	/**
 	 * Parser utility
 	 */
 	warna.parse = function(color) {
@@ -189,6 +277,15 @@
 				rgb = hsvToRgb(color.hue, color.saturation, color.value);
 			}
 
+			// Convert HSL object
+			if (
+				('hue' in color) && 
+				('saturation' in color) && 
+				('luminosity' in color)
+			) {
+				rgb = hslToRgb(color.hue, color.saturation, color.luminosity);
+			}
+
 		}
 
 		// RGB is not converted
@@ -207,6 +304,7 @@
 			rgb: rgb,
 			hex: rgbToHex(rgb.red, rgb.green, rgb.blue),
 			hsv: rgbToHsv(rgb.red, rgb.green, rgb.blue),
+			hsl: rgbToHsl(rgb.red, rgb.green, rgb.blue),
 			alpha: alpha
 		};
 	};
@@ -216,15 +314,19 @@
 	 */
 	function Gradient(begin, end) {
 
+		// Parse color parameter
+		begin = warna.parse(begin);
+		end = warna.parse(end);
+
 		// Prepare gradient
 		var gradient = {
-			begin: null,
-			end: null
+			begin: begin.rgb,
+			end: end.rgb
 		};
 
-		// Parse color parameter
-		gradient.begin = warna.parse(begin);
-		gradient.end = warna.parse(end);
+		// Add alpha value
+		gradient.begin.alpha = begin.alpha;
+		gradient.end.alpha = end.alpha;
 
 		if (!gradient.begin) {
 			throw Error('Beginning color is not formatted properly.');
@@ -249,8 +351,8 @@
 		}
 
 		// Redefine color
-		var begin 	= gradient.begin.rgb;
-		var end 	= gradient.end.rgb;
+		var begin 	= gradient.begin;
+		var end 	= gradient.end;
 
 		var color = {
 		    red: begin.red + Math.floor(pos * (end.red - begin.red)),
@@ -259,11 +361,8 @@
 		};
 
 		// Check alpha value
-		var beginAlpha 	= gradient.begin.alpha;
-		var endAlpha 	= gradient.end.alpha;
-
-		if (beginAlpha !== endAlpha) {
-			color.alpha = beginAlpha + (pos * (endAlpha - beginAlpha));
+		if (begin.alpha !== end.alpha) {
+			color.alpha = begin.alpha + (pos * (end.alpha - begin.alpha));
 		}
 
 		return warna.parse(color);
@@ -321,13 +420,13 @@
 				var color = colors[a][type];
 
 				// Detect alpha value
-				if ((type === 'rgb' || type === 'hsv') && colors[a].alpha !== 1) {
+				if ((type === 'rgb' || type === 'hsv' || type === 'hsl') && colors[a].alpha !== 1) {
 					color.alpha = colors[a].alpha;
 				} 
 
 				result.push(color);
 			}
-			
+
 			return result;
 		}
 
