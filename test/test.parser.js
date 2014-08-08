@@ -76,25 +76,6 @@ describe('Parser utility test:', function(){
 
 	});
 
-	describe('Parse RGBA color', function() {
-
-		it('should return correct warna object if supplied with RGBA object', function() {
-
-			var color = warna.parse({red: 255, green: 255, blue: 255, alpha: 0.5});
-
-			assert.deepEqual(color.hex, '#ffffff');
-			assert.equal(color.alpha, 0.5);
-
-			assert.deepEqual(color.hsv, {
-				hue: 0,
-				saturation: 0,
-				value: 100
-			});
-
-		});
-
-	});
-
 	describe('Parse HSV color', function() {
 
 		it('should return correct warna object if supplied with HSV object', function() {
