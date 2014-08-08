@@ -10,8 +10,7 @@
     "color",
     "utility",
     "gradient",
-    "rgb",
-    "hex"
+    "color-converter"
   ],
   "author": "Alfiana E. Sibuea <alfian.sibuea@gmail.com>",
   "license": "BSD",
@@ -22,15 +21,6 @@
   "main": "warna.js",
   "scripts": {
     "test": "mocha"
-  },
-  "testling": {
-    "harness": "mocha-bdd",
-    "files": "test/*.js",
-    "browsers": [
-      "ie/8..latest",
-      "chrome/latest",
-      "firefox/latest"
-    ]
   },
   "devDependencies": {
     "grunt": "^0.4.5",
