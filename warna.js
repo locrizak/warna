@@ -312,14 +312,22 @@
 		for (var a = 0; a < positions.length; a++) {
 			colors.push(this.getPosition(positions[a]));
 		}
-
+		
 		function convert(type) {
 			var result = [];
 
 			for (var a = 0; a < colors.length; a++) {
-				result.push(colors[type]);
-			}
 
+				var color = colors[a][type];
+
+				// Detect alpha value
+				if ((type === 'rgb' || type === 'hsv') && colors[a].alpha !== 1) {
+					color.alpha = colors[a].alpha;
+				} 
+
+				result.push(color);
+			}
+			
 			return result;
 		}
 
