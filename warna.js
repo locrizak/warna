@@ -1,6 +1,6 @@
 
 /*!
- * Warna v0.2.0
+ * Warna v0.2.2
  * https://github.com/publicis-indonesia/warna/
  *
  * Copyright 2014 Publicis Metro Indonesia, PT. and other contributors
