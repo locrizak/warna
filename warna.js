@@ -357,13 +357,9 @@
 		var color = {
 		    red: begin.red + Math.floor(pos * (end.red - begin.red)),
 		    green: begin.green + Math.floor(pos * (end.green - begin.green)),
-		    blue: begin.blue + Math.floor(pos * (end.blue - begin.blue))
+		    blue: begin.blue + Math.floor(pos * (end.blue - begin.blue)),
+		    alpha: begin.alpha + (pos * (end.alpha - begin.alpha))
 		};
-
-		// Check alpha value
-		if (begin.alpha !== end.alpha) {
-			color.alpha = begin.alpha + (pos * (end.alpha - begin.alpha));
-		}
 
 		return warna.parse(color);
 	};
